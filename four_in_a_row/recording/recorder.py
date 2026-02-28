@@ -7,7 +7,8 @@ from datetime import UTC, datetime
 from pathlib import Path
 from uuid import uuid4
 
-from four_in_a_row.core.models import GameState, Move, RuleSet
+from four_in_a_row.core.models import GameState, Move, PlayerColor, RuleSet
+from four_in_a_row.interface.protocols import Player
 from four_in_a_row.interface.views import Observation
 from four_in_a_row.recording import events
 from four_in_a_row.recording.schema import (
@@ -31,7 +32,10 @@ class JsonlRecorder:
         self._started_at: str | None = None
 
     def record_match_started(
-        self, rule_set: RuleSet, players: dict, initial_state: GameState
+        self,
+        rule_set: RuleSet,
+        players: dict[PlayerColor, Player],
+        initial_state: GameState,
     ) -> None:
         # 开局事件记录规则、玩家信息和初始棋盘。
         timestamp = _timestamp()
@@ -54,7 +58,10 @@ class JsonlRecorder:
         )
 
     def record_turn_started(
-        self, turn_index: int, player, observation: Observation
+        self,
+        turn_index: int,
+        player: Player,
+        observation: Observation,
     ) -> None:
         # 回合开始时记录观察信息，方便分析当时的可选动作空间。
         self._emit(
@@ -76,7 +83,7 @@ class JsonlRecorder:
     def record_move_submitted(
         self,
         turn_index: int,
-        player,
+        player: Player,
         move: Move,
         think_time_ms: int,
     ) -> None:
@@ -94,7 +101,7 @@ class JsonlRecorder:
     def record_move_applied(
         self,
         turn_index: int,
-        player,
+        player: Player,
         move: Move | None,
         previous_state: GameState,
         new_state: GameState,
@@ -158,7 +165,7 @@ class JsonlRecorder:
         *,
         timestamp: str | None = None,
         turn_index: int | None = None,
-        player=None,
+        player: Player | None = None,
     ) -> None:
         # 所有事件先拼成统一公共字段，再附加各事件自己的载荷。
         event = {

@@ -7,7 +7,8 @@ from time import perf_counter_ns
 
 from four_in_a_row.core.models import GameState, PlayerColor, RuleSet
 from four_in_a_row.core.rules import apply_move, is_terminal, new_game
-from four_in_a_row.interface.views import Observation, build_observation
+from four_in_a_row.interface.protocols import Player
+from four_in_a_row.interface.views import build_observation
 from four_in_a_row.recording.recorder import JsonlRecorder
 
 
@@ -21,8 +22,8 @@ class MatchResult:
 
 
 def run_match(
-    black_player,
-    white_player,
+    black_player: Player,
+    white_player: Player,
     rule_set: RuleSet,
     recorder: JsonlRecorder | None = None,
 ) -> MatchResult:
