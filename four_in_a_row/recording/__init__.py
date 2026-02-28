@@ -1,1 +1,1 @@
-"""Recording and export helpers."""
+"""记录与导出相关功能的包入口。"""

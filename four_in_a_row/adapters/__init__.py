@@ -1,1 +1,1 @@
-"""Concrete players and front-end adapters."""
+"""具体玩家实现和前端适配层。"""

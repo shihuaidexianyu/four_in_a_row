@@ -1,1 +1,1 @@
-"""Game core primitives."""
+"""核心规则层包入口。"""

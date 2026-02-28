@@ -1,9 +1,9 @@
-"""Domain-specific errors for the game engine."""
+"""规则层和调度层共用的领域错误。"""
 
 
 class GameError(Exception):
-    """Base class for game-related failures."""
+    """所有游戏相关异常的基类。"""
 
 
 class InvalidMoveError(GameError):
-    """Raised when a move cannot be applied to the current state."""
+    """当动作无法应用到当前状态时抛出。"""

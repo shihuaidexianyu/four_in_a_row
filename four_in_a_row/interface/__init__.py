@@ -1,1 +1,1 @@
-"""Interfaces shared by human and agent players."""
+"""人类玩家和 AI 共用的接口层。"""
