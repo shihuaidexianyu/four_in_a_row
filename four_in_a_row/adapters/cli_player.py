@@ -1,4 +1,4 @@
-"""Interactive CLI player."""
+"""命令行交互玩家。"""
 
 from __future__ import annotations
 
@@ -16,6 +16,8 @@ from four_in_a_row.interface.views import Observation
 
 @dataclass(slots=True)
 class CLIPlayer:
+    """把终端输入适配成统一的 Move 协议。"""
+
     player_id: str
     color: PlayerColor
     rule_set: RuleSet
@@ -30,11 +32,11 @@ class CLIPlayer:
         while True:
             try:
                 if self.rule_set.gravity:
-                    # Classic mode only needs a column; the engine computes the drop row.
+                    # 经典模式只输入列号，最终落点由规则层决定。
                     raw_value = input("Choose a column: ").strip()
                     return Move(player=self.color, column=int(raw_value))
 
-                # Coordinate mode supports rule variants without gravity.
+                # 无重力模式下，玩家直接输入 row,col。
                 raw_value = input("Choose row,col: ").strip()
                 row_text, col_text = (
                     part.strip() for part in raw_value.split(",", maxsplit=1)
@@ -44,4 +46,5 @@ class CLIPlayer:
                     position=Position(row=int(row_text), col=int(col_text)),
                 )
             except (ValueError, IndexError):
+                # 这里只兜底输入格式错误，真正的动作合法性由规则层判断。
                 print("Invalid input format. Try again.")

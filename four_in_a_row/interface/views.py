@@ -1,4 +1,4 @@
-"""Read-only state views exposed to human and AI players."""
+"""暴露给人类和 AI 的只读视图。"""
 
 from __future__ import annotations
 
@@ -17,6 +17,8 @@ from four_in_a_row.core.rules import legal_actions
 
 @dataclass(frozen=True, slots=True)
 class Observation:
+    """玩家每回合拿到的统一输入。"""
+
     board: Board
     next_player: PlayerColor
     legal_actions: tuple[Move, ...]
@@ -26,6 +28,7 @@ class Observation:
 
 
 def build_observation(state: GameState, rule_set: RuleSet) -> Observation:
+    # 观察对象是状态快照，不应该让玩家直接改动底层 GameState。
     return Observation(
         board=state.board,
         next_player=state.next_player,

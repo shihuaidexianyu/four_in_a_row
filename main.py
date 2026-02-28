@@ -10,6 +10,7 @@ from four_in_a_row.recording.recorder import JsonlRecorder
 
 
 def main() -> None:
+    # 当前入口先提供一个最小可玩的本地闭环：人类对随机 AI，并记录日志。
     rule_set = RuleSet()
     recorder = JsonlRecorder(Path("match_logs"))
     black_player = CLIPlayer(
@@ -30,6 +31,7 @@ def main() -> None:
         recorder=recorder,
     )
 
+    # 终端输出只做结果展示，分析数据以日志文件为准。
     print()
     print("Final board:")
     print(board_to_pretty(result.final_state.board))
