@@ -4,14 +4,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from four_in_a_row.core.models import (
+from game_base.core.models import (
     Move,
     PlayerColor,
     Position,
     RuleSet,
     board_to_pretty,
 )
-from four_in_a_row.interface.views import Observation
+from game_base.interface.views import Observation
 
 
 @dataclass(slots=True)

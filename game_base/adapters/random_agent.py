@@ -5,8 +5,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from random import Random
 
-from four_in_a_row.core.models import Move, PlayerColor
-from four_in_a_row.interface.views import Observation
+from game_base.core.models import Move, PlayerColor
+from game_base.interface.views import Observation
 
 
 @dataclass(slots=True)

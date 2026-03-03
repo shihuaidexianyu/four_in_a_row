@@ -7,11 +7,11 @@ from datetime import UTC, datetime
 from pathlib import Path
 from uuid import uuid4
 
-from four_in_a_row.core.models import GameState, Move, PlayerColor, RuleSet
-from four_in_a_row.interface.protocols import Player
-from four_in_a_row.interface.views import Observation
-from four_in_a_row.recording import events
-from four_in_a_row.recording.schema import (
+from game_base.core.models import GameState, Move, PlayerColor, RuleSet
+from game_base.interface.protocols import Player
+from game_base.interface.views import Observation
+from game_base.recording import events
+from game_base.recording.schema import (
     serialize_move,
     serialize_ruleset,
     serialize_state,

@@ -5,11 +5,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 from time import perf_counter_ns
 
-from four_in_a_row.core.models import GameState, PlayerColor, RuleSet
-from four_in_a_row.core.rules import apply_move, is_terminal, new_game
-from four_in_a_row.interface.protocols import Player
-from four_in_a_row.interface.views import build_observation
-from four_in_a_row.recording.recorder import JsonlRecorder
+from game_base.core.models import GameState, PlayerColor, RuleSet
+from game_base.core.rules import apply_move, is_terminal, new_game
+from game_base.interface.protocols import Player
+from game_base.interface.views import build_observation
+from game_base.recording.recorder import JsonlRecorder
 
 
 @dataclass(frozen=True, slots=True)

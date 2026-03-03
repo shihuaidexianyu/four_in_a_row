@@ -2,11 +2,11 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from four_in_a_row.adapters.cli_player import CLIPlayer
-from four_in_a_row.adapters.random_agent import RandomAgent
-from four_in_a_row.core.engine import run_match
-from four_in_a_row.core.models import PlayerColor, RuleSet, board_to_pretty
-from four_in_a_row.recording.recorder import JsonlRecorder
+from game_base.adapters.cli_player import CLIPlayer
+from game_base.adapters.random_agent import RandomAgent
+from game_base.core.engine import run_match
+from game_base.core.models import PlayerColor, RuleSet, board_to_pretty
+from game_base.recording.recorder import JsonlRecorder
 
 
 def main() -> None:

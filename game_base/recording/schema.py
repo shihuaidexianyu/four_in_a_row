@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from four_in_a_row.core.models import GameState, Move, RuleSet, board_to_matrix
+from game_base.core.models import GameState, Move, RuleSet, board_to_matrix
 
 
 def serialize_move(move: Move | None) -> dict[str, object] | None:

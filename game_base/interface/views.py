@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from four_in_a_row.core.models import (
+from game_base.core.models import (
     Board,
     GameState,
     GameStatus,
@@ -12,7 +12,7 @@ from four_in_a_row.core.models import (
     PlayerColor,
     RuleSet,
 )
-from four_in_a_row.core.rules import legal_actions
+from game_base.core.rules import legal_actions
 
 
 @dataclass(frozen=True, slots=True)

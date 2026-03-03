@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from four_in_a_row.core.errors import InvalidMoveError
-from four_in_a_row.core.models import (
+from game_base.core.errors import InvalidMoveError
+from game_base.core.models import (
     Board,
     GameState,
     GameStatus,
