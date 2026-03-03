@@ -38,19 +38,16 @@ class Position:
 
 @dataclass(frozen=True, slots=True)
 class Move:
-    """一步落子动作，兼容重力模式和坐标模式。"""
+    """一步落子动作。"""
 
     player: PlayerColor
-    column: int | None = None
-    position: Position | None = None
+    position: Position
 
     def as_dict(self) -> dict[str, object]:
-        payload: dict[str, object] = {"player": self.player.value}
-        if self.column is not None:
-            payload["column"] = self.column
-        if self.position is not None:
-            payload["position"] = {"row": self.position.row, "col": self.position.col}
-        return payload
+        return {
+            "player": self.player.value,
+            "position": {"row": self.position.row, "col": self.position.col},
+        }
 
 
 @dataclass(frozen=True, slots=True)
@@ -61,7 +58,6 @@ class RuleSet:
     cols: int = 9
     connect_n: int = 4
     first_player: PlayerColor = PlayerColor.BLACK
-    gravity: bool = True
 
     def __post_init__(self) -> None:
         # 在初始化时尽早做约束检查，避免后续运行阶段才发现规则非法。

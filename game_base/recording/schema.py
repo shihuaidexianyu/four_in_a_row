@@ -19,7 +19,6 @@ def serialize_ruleset(rule_set: RuleSet) -> dict[str, object]:
         "cols": rule_set.cols,
         "connect_n": rule_set.connect_n,
         "first_player": rule_set.first_player.value,
-        "gravity": rule_set.gravity,
     }
 
 

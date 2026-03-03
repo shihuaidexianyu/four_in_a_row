@@ -28,15 +28,8 @@ def legal_actions(state: GameState, rule_set: RuleSet) -> list[Move]:
     if state.status is not GameStatus.ONGOING:
         return []
 
+    # 当前项目只支持无重力规则：所有空格都直接是合法动作。
     actions: list[Move] = []
-    if rule_set.gravity:
-        # 重力模式下，玩家选择的是“列”，具体落到哪一行由引擎计算。
-        for col in range(rule_set.cols):
-            if _find_drop_row(state.board, col) is not None:
-                actions.append(Move(player=state.next_player, column=col))
-        return actions
-
-    # 无重力模式下，所有空格都直接是合法动作。
     for row_index, row in enumerate(state.board):
         for col_index, cell in enumerate(row):
             if cell is None:
@@ -56,19 +49,6 @@ def validate_move(state: GameState, move: Move, rule_set: RuleSet) -> None:
     if move.player is not state.next_player:
         raise InvalidMoveError("It is not this player's turn.")
 
-    if rule_set.gravity:
-        # 重力模式只接受列输入，且该列必须还能继续落子。
-        if move.column is None or move.position is not None:
-            raise InvalidMoveError("Gravity mode requires a column-based move.")
-        if not 0 <= move.column < rule_set.cols:
-            raise InvalidMoveError("Column is out of bounds.")
-        if _find_drop_row(state.board, move.column) is None:
-            raise InvalidMoveError("Selected column is full.")
-        return
-
-    # 坐标模式要求显式给出一个空位置。
-    if move.position is None or move.column is not None:
-        raise InvalidMoveError("Coordinate mode requires an explicit board position.")
     if (
         not 0 <= move.position.row < rule_set.rows
         or not 0 <= move.position.col < rule_set.cols
@@ -80,13 +60,12 @@ def validate_move(state: GameState, move: Move, rule_set: RuleSet) -> None:
 
 def apply_move(state: GameState, move: Move, rule_set: RuleSet) -> GameState:
     validate_move(state, move, rule_set)
-    target = _resolve_position(state.board, move, rule_set)
-    updated_board = _place_piece(state.board, target, move.player)
+    updated_board = _place_piece(state.board, move.position, move.player)
 
     # 新落下的这一子是唯一可能改变胜负的因素，因此只围绕它检查即可。
     winner = (
         move.player
-        if _has_connection(updated_board, target, move.player, rule_set.connect_n)
+        if _has_connection(updated_board, move.position, move.player, rule_set.connect_n)
         else None
     )
     if winner is PlayerColor.BLACK:
@@ -98,40 +77,18 @@ def apply_move(state: GameState, move: Move, rule_set: RuleSet) -> GameState:
     else:
         status = GameStatus.ONGOING
 
-    # last_move 统一存成“最终落点”，这样上层不必重复推导重力落点。
-    resolved_move = Move(player=move.player, position=target, column=move.column)
     return GameState(
         board=updated_board,
         next_player=state.next_player.other(),
         move_count=state.move_count + 1,
         status=status,
         winner=winner,
-        last_move=resolved_move,
+        last_move=move,
     )
 
 
 def is_terminal(state: GameState) -> bool:
     return state.status is not GameStatus.ONGOING
-
-
-def _find_drop_row(board: Board, col: int) -> int | None:
-    # 从底往上找第一个空位，符合经典四子棋的下落效果。
-    for row_index in range(len(board) - 1, -1, -1):
-        if board[row_index][col] is None:
-            return row_index
-    return None
-
-
-def _resolve_position(board: Board, move: Move, rule_set: RuleSet) -> Position:
-    if rule_set.gravity:
-        # 这里把“列动作”转换成“最终坐标”，供后续统一处理。
-        drop_row = _find_drop_row(board, move.column or 0)
-        if drop_row is None:
-            raise InvalidMoveError("Selected column is full.")
-        return Position(row=drop_row, col=move.column or 0)
-    if move.position is None:
-        raise InvalidMoveError("Position is required for coordinate mode.")
-    return move.position
 
 
 def _place_piece(board: Board, position: Position, player: PlayerColor) -> Board:
